@@ -1,0 +1,61 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-workflow-tables
+      author: saint
+      changes:
+        # Таблица определений задач
+        - createTable:
+            tableName: task_definitions
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: task_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payload
+                  type: jsonb # Postgres specific
+              - column:
+                  name: retry_count
+                  type: int
+                  defaultValueNumeric: 3
+              - column:
+                  name: timeout_seconds
+                  type: int
+                  defaultValueNumeric: 3600
+
+        # Таблица связей (DAG)
+        - createTable:
+            tableName: task_dependencies
+            columns:
+              - column:
+                  name: parent_task_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_dep_parent
+                    references: task_definitions(id)
+              - column:
+                  name: child_task_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_dep_child
+                    references: task_definitions(id)
+
+        # Уникальность связи (чтобы не было дублей)
+        - addPrimaryKey:
+            tableName: task_dependencies
+            columnNames: parent_task_id, child_task_id
+            constraintName: pk_task_dependencies

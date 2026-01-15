@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: titan-orchestrator
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/titan_db  # Убедись, что создал базу titan_db
+    username: postgres
+    password: root7769
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    # ВАЖНО: validate. Мы используем Liquibase, поэтому Hibernate НЕ должен сам менять схему.
+    # Если поставишь 'update', они могут подраться с Liquibase.
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # Эта настройка помогает Hibernate 6 работать с JDBC metadata
+        format_sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true

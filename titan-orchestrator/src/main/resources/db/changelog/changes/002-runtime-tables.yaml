@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-runtime-tables
+      author: saint
+      changes:
+        # Запуск процесса целиком
+        - createTable:
+            tableName: workflow_instances
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: status
+                  type: varchar(50) # RUNNING, COMPLETED, FAILED
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueDate: now()
+
+        # Конкретные задачи внутри запуска
+        - createTable:
+            tableName: task_instances
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: task_definition_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_inst_def
+                    references: task_definitions(id)
+              - column:
+                  name: workflow_instance_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_inst_wf
+                    references: workflow_instances(id)
+              - column:
+                  name: status
+                  type: varchar(50) # PENDING, READY, IN_PROGRESS, SUCCESS, FAILED
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueDate: now()
+              - column:
+                  name: started_at
+                  type: timestamp
+              - column:
+                  name: finished_at
+                  type: timestamp
