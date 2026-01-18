@@ -2,8 +2,13 @@ spring:
   application:
     name: titan-orchestrator
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/titan_db  # Убедись, что создал базу titan_db
+    url: jdbc:postgresql://localhost:5432/titan_db  # Updated to 5433 to match docker-compose
     username: postgres
     password: root7769
     driver-class-name: org.postgresql.Driver
