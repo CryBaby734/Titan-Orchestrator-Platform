@@ -1,0 +1,27 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: titan-worker
+
+  # Подключаемся к той же базе (Shared Database Pattern)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/titan_db
+    username: postgres # Твой юзер
+    password: root7769 # Твой пароль
+    driver-class-name: org.postgresql.Driver
+
+  # JPA настройки (важно: ddl-auto = validate, чтобы воркер случайно не удалил таблицы!)
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # Redis (Тот же самый)
+  data:
+    redis:
+      host: localhost
+      port: 6379
