@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/SpringCloudMastery" />
+        <option name="gradleJvm" value="openjdk-21" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/SpringCloudMastery" />
+            <option value="$PROJECT_DIR$/SpringCloudMastery/account-service" />
+            <option value="$PROJECT_DIR$/SpringCloudMastery/config-server" />
+            <option value="$PROJECT_DIR$/SpringCloudMastery/discovery-server" />
+            <option value="$PROJECT_DIR$/SpringCloudMastery/dynamic-routing-core" />
+            <option value="$PROJECT_DIR$/SpringCloudMastery/gateway-service" />
+            <option value="$PROJECT_DIR$/SpringCloudMastery/spring-cloud-mastery" />
+            <option value="$PROJECT_DIR$/SpringCloudMastery/user-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/titan-orchestrator" />
+        <option name="gradleJvm" value="openjdk-21" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/titan-orchestrator" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/titan-worker" />
+        <option name="gradleJvm" value="openjdk-21" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/titan-worker" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

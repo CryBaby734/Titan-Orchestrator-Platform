@@ -28,6 +28,8 @@ public class TaskInstance {
 
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
+    @Column(name = "retry_count")
+    private Integer retryCount = 0;
 
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime startedAt;

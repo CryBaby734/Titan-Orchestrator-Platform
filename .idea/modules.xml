@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dynamic-routing-core/SpringCloudMastery.dynamic-routing-core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dynamic-routing-core/SpringCloudMastery.dynamic-routing-core.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gateway-service/SpringCloudMastery.gateway-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/gateway-service/SpringCloudMastery.gateway-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/spring-cloud-mastery/SpringCloudMastery.spring-cloud-mastery.main.iml" filepath="$PROJECT_DIR$/.idea/modules/spring-cloud-mastery/SpringCloudMastery.spring-cloud-mastery.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-service/SpringCloudMastery.user-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/user-service/SpringCloudMastery.user-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/titan-orchestrator.main.iml" filepath="$PROJECT_DIR$/.idea/modules/titan-orchestrator.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/titan-platform.iml" filepath="$PROJECT_DIR$/.idea/titan-platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/titan-worker.main.iml" filepath="$PROJECT_DIR$/.idea/modules/titan-worker.main.iml" />
+    </modules>
+  </component>
+</project>

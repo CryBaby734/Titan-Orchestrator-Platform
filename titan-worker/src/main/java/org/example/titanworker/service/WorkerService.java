@@ -72,9 +72,25 @@ public class WorkerService {
             handleDependencies(task);
 
         } catch (Exception e) {
-            log.error("Error executing task", e);
-            task.setStatus(TaskStatus.FAILED);
-            taskInstanceRepository.save(task);
+            log.error("Task execution failed: {}", e.getMessage());
+
+            int maxRetries = 3;
+
+            if(task.getRetryCount() < maxRetries) {
+                int nextAttempt = task.getRetryCount() + 1;
+
+                log.warn(">>> RETRYING TASK... Attempt {} of {}", nextAttempt, maxRetries);
+
+                task.setRetryCount(nextAttempt);
+                task.setStatus(TaskStatus.READY);
+
+                taskInstanceRepository.save(task);
+
+            }else {
+                log.error(">>> ALL RETRIES EXHAUSTED. Marking as FAILED.");
+                task.setStatus(TaskStatus.FAILED);
+                taskInstanceRepository.save(task);
+            }
         }
     }
 
