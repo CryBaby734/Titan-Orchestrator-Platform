@@ -23,10 +23,11 @@ public class DispatcherService {
 
     private static final String QUEUE_NAME = "titan_tasks_queue";
 
+
     @Scheduled(fixedDelay = 5000)
     @Transactional
     public void dispatch(){
-        List<TaskInstance> readyTasks = repository.findAllByStatus(TaskStatus.READY);
+        List<TaskInstance> readyTasks = repository.findReadyTasksWithLock();
 
         if(readyTasks.isEmpty()){
             return;
@@ -34,21 +35,20 @@ public class DispatcherService {
         log.info("Found {} tasks ready for dispatch", readyTasks.size());
 
         for(TaskInstance task : readyTasks) {
-            TaskMessage message = new TaskMessage(
-                    task.getId(),
-                    task.getTaskDefinition().getTaskType().name(),
-                    task.getTaskDefinition().getPayload()
-            );
+            try{
+                TaskMessage message = new TaskMessage(
+                        task.getId(),
+                        task.getTaskDefinition().getTaskType().name(),
+                        task.getTaskDefinition().getPayload()
+                );
 
-            try {
-                redisTemplate.opsForList().leftPush(QUEUE_NAME, message);
-                task.setStatus(TaskStatus.IN_PROGRESS);
-                task.setStartedAt(java.time.LocalDateTime.now());
+                redisTemplate.opsForList().leftPush("titan_tasks_queue", message);
+
+                task.setStatus(TaskStatus.QUEUED);
                 repository.save(task);
-
-                log.info("Task {} dispatched to Redis", task.getId());
-            }catch (Exception e){
-                log.error("Failed to dispatch task {}", task.getId(), e);
+                log.info("Task {} dispatched to Redis and marked as QUEUED", task.getId());
+            }catch(Exception e){
+                log.error("Task {} failed to dispatch", task.getId(), e);
             }
         }
     }
