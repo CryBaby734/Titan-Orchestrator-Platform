@@ -8,5 +8,5 @@ public interface TaskExecutor {
 
     boolean canExecute(String taskType);
 
-    void execute(TaskDefinition taskDefinition);
+    String execute(TaskDefinition taskDefinition);
 }

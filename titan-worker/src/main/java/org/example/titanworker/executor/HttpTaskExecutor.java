@@ -16,47 +16,53 @@ public class HttpTaskExecutor implements TaskExecutor {
 
     private final RestClient restClient;
 
-
     @Override
     public boolean canExecute(String taskType) {
         return "HTTP_REQUEST".equals(taskType);
     }
 
     @Override
-    public void execute(TaskDefinition taskDefinition) {
-         Map<String, Object> payload = taskDefinition.getPayload();
+    public String execute(TaskDefinition taskDefinition) {
+        Map<String, Object> payload = taskDefinition.getPayload();
 
-         String url = (String) payload.get("url");
-         String method = (String) payload.getOrDefault("method", "POST");
+        String url = (String) payload.get("url");
+        String method = (String) payload.getOrDefault("method", "POST");
 
-         log.info("Executing HTTP Request: {} {}", method, url);
+        log.info("Executing HTTP Request: {} {}", method, url);
 
-         if("GET".equalsIgnoreCase(method)) {
-             String response = restClient.get()
-                     .uri(url)
-                     .retrieve()
-                     .body(String.class);
+        String response = null; // Переменная для результата
 
-             log.info("Response received: {}", response != null ? response.substring(0, Math.min(response.length(), 100)) + "..." : "null");
+        if("GET".equalsIgnoreCase(method)) {
+            response = restClient.get()
+                    .uri(url)
+                    .retrieve()
+                    .body(String.class);
 
-         }else if("POST".equalsIgnoreCase(method)) {
-           Object requestBody = payload.get("body");
+            log.info("Response received: {}", response != null ? response.substring(0, Math.min(response.length(), 100)) + "..." : "null");
 
-           var requestSpec = restClient.post()
-                   .uri(url)
-                   .contentType(org.springframework.http.MediaType.APPLICATION_JSON);
+        } else if("POST".equalsIgnoreCase(method)) {
+            Object requestBody = payload.get("body");
 
+            var requestSpec = restClient.post()
+                    .uri(url)
+                    .contentType(MediaType.APPLICATION_JSON);
 
-           if(requestBody != null) {
-               requestSpec.body(requestBody);
-           }else{
-               log.warn("POST request payload is missing 'body' key, sending empty body");
-           }
+            if(requestBody != null) {
+                requestSpec.body(requestBody);
+            } else {
+                log.warn("POST request payload is missing 'body' key, sending empty body");
+                // Важно: для некоторых API пустой body может вызвать ошибку, можно передать "{}"
+                requestSpec.body("{}");
+            }
 
-           String response = requestSpec.retrieve()
-                   .body(String.class);
+            response = requestSpec.retrieve()
+                    .body(String.class);
 
-           log.info("Response received: {}", response);
-         }
+            log.info("Response received: {}", response);
+        } else {
+            throw new UnsupportedOperationException("Method " + method + " not supported");
+        }
+
+        return response; // <-- ТЕПЕРЬ ВОЗВРАЩАЕМ РЕЗУЛЬТАТ!
     }
 }

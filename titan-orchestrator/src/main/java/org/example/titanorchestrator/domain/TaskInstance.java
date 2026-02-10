@@ -31,6 +31,9 @@ public class TaskInstance {
     @Column(name = "retry_count")
     private Integer retryCount = 0;
 
+    @Column(name = "output", columnDefinition = "TEXT")
+    private String output;
+
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime startedAt;
     private LocalDateTime finishedAt;
