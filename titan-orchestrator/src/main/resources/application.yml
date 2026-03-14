@@ -17,7 +17,7 @@ spring:
     # ВАЖНО: validate. Мы используем Liquibase, поэтому Hibernate НЕ должен сам менять схему.
     # Если поставишь 'update', они могут подраться с Liquibase.
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

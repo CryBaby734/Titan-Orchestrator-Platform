@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ public class WorkerService {
     private final TaskInstanceRepository taskInstanceRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final org.springframework.context.ApplicationContext applicationContext;
+    private final ContextService contextService;
 
     private static final String QUEUE_NAME = "titan_tasks_queue";
 
@@ -53,20 +55,33 @@ public class WorkerService {
 
         TaskInstance task = taskOpt.get();
 
+        Map<String, Object> originalPayload = task.getTaskDefinition().getPayload();
         try {
             log.info("Executing task [{}] type [{}]....", task.getTaskDefinition().getName(), message.taskType());
+
+
+            Map<String, Object> resolvedPayload = contextService.resolvePayload(originalPayload, task.getWorkflowInstance().getId());
+
+            task.getTaskDefinition().setPayload(resolvedPayload);
 
             TaskExecutor executor = executors.stream()
                     .filter(e -> e.canExecute(message.taskType()))
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("No executor found for " + message.taskType()));
 
-            executor.execute(task.getTaskDefinition());
+            String executionResult = executor.execute(task.getTaskDefinition());
 
-            log.info("Task completed successfully!");
+            task.getTaskDefinition().setPayload(originalPayload);
+
+            task.setOutput(executionResult);
+
+
 
             task.setStatus(TaskStatus.SUCCESS);
             task.setFinishedAt(LocalDateTime.now());
+
+            log.info("Task completed successfully!");
+
             taskInstanceRepository.save(task);
 
             handleDependencies(task);
@@ -91,6 +106,9 @@ public class WorkerService {
                 task.setStatus(TaskStatus.FAILED);
                 taskInstanceRepository.save(task);
             }
+        }finally {
+            // 5. САМОЕ ВАЖНОЕ: всегда возвращаем чистый шаблон обратно перед коммитом в БД!
+            task.getTaskDefinition().setPayload(originalPayload);
         }
     }
 

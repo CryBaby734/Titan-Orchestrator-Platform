@@ -13,4 +13,6 @@ public interface TaskInstanceRepository extends JpaRepository<TaskInstance, UUID
     List<TaskInstance> findAllByStatus(TaskStatus status);
 
     List<TaskInstance> findAllByWorkflowInstanceIdAndTaskDefinitionIn(UUID id, Set<TaskDefinition> childrenDefinitions);
+
+    List<TaskInstance> findByWorkflowInstanceId(UUID workflowInstanceId);
 }
