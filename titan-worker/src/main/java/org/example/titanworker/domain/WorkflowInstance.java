@@ -19,13 +19,13 @@ public class WorkflowInstance {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Enumerated(EnumType.STRING)
-    private TaskStatus status;
-
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
 
     @OneToMany(mappedBy = "workflowInstance", cascade = CascadeType.ALL)
     private List<TaskInstance> tasks = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private WorkflowStatus status;
 }

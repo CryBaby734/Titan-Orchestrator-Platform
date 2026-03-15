@@ -71,6 +71,7 @@ public class WorkerService {
 
             String executionResult = executor.execute(task.getTaskDefinition());
 
+            log.info(">>> ОТВЕТ ОТ НЕЙРОСЕТИ: \n{}", executionResult);
             task.getTaskDefinition().setPayload(originalPayload);
 
             task.setOutput(executionResult);

@@ -23,6 +23,7 @@ public interface TaskInstanceRepository extends JpaRepository<TaskInstance, UUID
         FOR UPDATE SKIP LOCKED
         """, nativeQuery = true)
     List<TaskInstance> findReadyTasksWithLock();
-
+    // Добавь этот метод, если его там нет:
+    List<TaskInstance> findAllByWorkflowInstanceId(UUID workflowInstanceId);
 
 }

@@ -6,6 +6,7 @@ import org.example.titanorchestrator.domain.TaskInstance;
 import org.example.titanorchestrator.domain.TaskStatus;
 import org.example.titanorchestrator.domain.WorkflowInstance;
 import org.example.titanorchestrator.dto.TaskDefinitionRequest;
+import org.example.titanorchestrator.dto.WorkflowStatus;
 import org.example.titanorchestrator.repository.TaskDefinitionRepository;
 import org.example.titanorchestrator.repository.TaskInstanceRepository;
 import org.example.titanorchestrator.repository.WorkflowInstanceRepository;
@@ -27,7 +28,7 @@ public class WorkflowService {
     @Transactional
     public UUID startWorkflow(List<UUID> taskDefinitionIds) {
         WorkflowInstance workflow = new WorkflowInstance();
-        workflow.setStatus(TaskStatus.IN_PROGRESS);
+        workflow.setStatus(WorkflowStatus.RUNNING);
         workflow = workflowInstanceRepository.save(workflow);
 
         List<TaskDefinition> definitions = taskDefinitionRepository.findAllById(taskDefinitionIds);
