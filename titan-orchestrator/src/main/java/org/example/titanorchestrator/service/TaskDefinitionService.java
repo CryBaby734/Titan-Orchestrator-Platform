@@ -24,6 +24,7 @@ public class TaskDefinitionService {
     public UUID createTask(TaskDefinitionRequest request){
 
         TaskDefinition task = new TaskDefinition();
+        task.setAlias(request.alias());
         task.setName(request.name());
 
         task.setTaskType(Tasktype.valueOf(request.taskType()));
@@ -65,6 +66,7 @@ public class TaskDefinitionService {
 
         for (BatchTaskRequest req : request.tasks()) {
             TaskDefinition task = new TaskDefinition();
+            task.setAlias(req.alias());
             task.setName(req.name());
             task.setTaskType(Tasktype.valueOf(req.type()));
             task.setPayload(req.payload());

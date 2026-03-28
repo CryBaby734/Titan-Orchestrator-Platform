@@ -103,7 +103,10 @@ public class ContextService {
             try{
                JsonNode outputNode = objectMapper.readTree(task.getOutput());
 
-               context.put(task.getTaskDefinition().getName(), outputNode);
+               String contextKey = task.getTaskDefinition().getAlias() != null
+                       ? task.getTaskDefinition().getAlias()
+                       : task.getTaskDefinition().getName();
+               context.put(contextKey, outputNode);
             }catch(Exception e) {
                log.error("Error resolving task output {}", task.getTaskDefinition().getName(), e);
             }

@@ -22,6 +22,9 @@ public class TaskDefinition {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "alias")
+    private String alias;
+
     @Column(nullable = false)
     private String name;
 

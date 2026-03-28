@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: your_name
+      changes:
+        - addColumn:
+            tableName: task_definitions
+            columns:
+              - column:
+                  name: alias
+                  type: varchar(255)
